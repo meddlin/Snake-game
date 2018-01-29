@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import drawSplashScreen from './splashscreen';
+
 import './main.html';
 
 /*
@@ -8,7 +10,6 @@ import './main.html';
 * 	Maria's Snake code on Github: https://github.com/Mariacristina88/Snake-game
 *	Original author: Maria Di Termine
 */
-
 
 var mycanvas;
 var ctx;
@@ -138,6 +139,8 @@ Template.game.onRendered(function() {
 	    	//Give it a border.
 	    	ctx.strokeStyle = "black";
 	    	ctx.strokeRect(0, 0, w, h);
+
+	    	drawSplashScreen(ctx);
 
 	    	//Disable the button _start_ while you're playing.
     		btn.setAttribute('disabled', true);
