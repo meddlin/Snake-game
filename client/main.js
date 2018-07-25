@@ -20,6 +20,10 @@ var snake;
 var food;
 var drawModule;
 
+var initGame = function() {
+
+};
+
 
 Template.game.onCreated(function () {} );
 
@@ -70,19 +74,28 @@ Template.game.onRendered(function() {
 			// This is the single square
 			ctx.fillStyle = "green";
 			ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+			
 
 			// This is the border of the square
 			ctx.strokeStyle = "darkgreen";
 			ctx.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+
 		}
 
 		var pizza = function(x, y) {
 		    // This is the border of the pizza
 		    ctx.fillStyle = 'yellow';
-		    ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+		    //ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+		    ctx.beginPath();
+		    ctx.arc(x * snakeSize, y * snakeSize, 3, 0, 2 * Math.PI, false);
+		    ctx.fill();
+
 		    // This is the single square 
 		    ctx.fillStyle = 'red';
-		    ctx.fillRect(x*snakeSize+1, y*snakeSize+1, snakeSize-2, snakeSize-2);
+		    //ctx.fillRect(x*snakeSize+1, y*snakeSize+1, snakeSize-2, snakeSize-2);
+		    ctx.beginPath();
+		    ctx.arc(x * snakeSize + 1, y * snakeSize + 1, 5, 0, 2 * Math.PI, false);
+		    ctx.stroke();
 		}
 
 		var scoreText = function() {
