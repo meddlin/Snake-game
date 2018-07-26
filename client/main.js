@@ -19,29 +19,10 @@ var score = 0;
 var snake;
 var food;
 var drawModule;
+var direction;
 
-var initGame = function() {
-
-};
-
-
-Template.game.onCreated(function () {} );
-
-Template.game.onRendered(function() {
-
-	mycanvas = document.getElementById('canvas');
-	ctx = mycanvas.getContext('2d');
-	var btn = document.getElementById('btn');
-
-	/*
-	* NOTE : hacked out event listener because the 'keydown' event wasn't working
-	*			in the 'events' Template helper.
-	*/
-	document.addEventListener('keydown', (event) => {
-		const keyCode = event.keyCode;
-
-		switch (keyCode) {
-
+var determineKeyPress = function(keyCode) {
+	switch (keyCode) {
         case 37:
             if (direction != 'right') {
                 direction = 'left';
@@ -66,15 +47,30 @@ Template.game.onRendered(function() {
             }
             break;
         }
+};
 
+
+Template.game.onCreated(function () {
+	/*
+	* NOTE : hacked out event listener because the 'keydown' event wasn't working
+	*			in the 'events' Template helper.
+	*/
+	document.addEventListener('keydown', (event) => {
+		determineKeyPress(event.keyCode);
 	});
+} );
+
+Template.game.onRendered(function() {
+
+	mycanvas = document.getElementById('canvas');
+	ctx = mycanvas.getContext('2d');
+	var btn = document.getElementById('btn');
 
 	drawModule = (function() {
 		var bodySnake = function(x, y) {
 			// This is the single square
 			ctx.fillStyle = "green";
 			ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
-			
 
 			// This is the border of the square
 			ctx.strokeStyle = "darkgreen";
@@ -82,6 +78,9 @@ Template.game.onRendered(function() {
 
 		}
 
+		// TODO : The pizza being drawn with these dimensions appears to throw off
+		//			the collision detection. The graphic seems to be bigger than
+		//			the 'hit area'.
 		var pizza = function(x, y) {
 		    // This is the border of the pizza
 		    ctx.fillStyle = 'yellow';
