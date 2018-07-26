@@ -20,6 +20,7 @@ var snake;
 var food;
 var drawModule;
 var direction;
+var running = true;
 
 var determineKeyPress = function(keyCode) {
 	switch (keyCode) {
@@ -143,87 +144,93 @@ Template.game.onRendered(function() {
 	    }
 
 	    var paint = function() {
-	    	//Let's draw the space in which the snake will move.
-	    	ctx.fillStyle = "lightgray";
-	    	ctx.fillRect(0, 0, w, h);
 
-	    	//Give it a border.
-	    	ctx.strokeStyle = "black";
-	    	ctx.strokeRect(0, 0, w, h);
+	    	if (running) {
+	    		//Let's draw the space in which the snake will move.
+		    	ctx.fillStyle = "lightgray";
+		    	ctx.fillRect(0, 0, w, h);
 
-	    	//Disable the button _start_ while you're playing.
-    		btn.setAttribute('disabled', true);
+		    	//Give it a border.
+		    	ctx.strokeStyle = "black";
+		    	ctx.strokeRect(0, 0, w, h);
 
-    		var snakeX = snake[0].x;
-    		var snakeY = snake[0].y;
+		    	//Disable the button _start_ while you're playing.
+	    		btn.setAttribute('disabled', true);
 
-    		/*
-			    Make the snake move.
-			    Use a variable ('direction') to control the movement.
-			    To move the snake, pop out the last element of the array and shift it on the top as first element.
-		    */
-		    if (direction == 'right') {
-		        snakeX++;
-		    } else if (direction == 'left') {
-		        snakeX--;
-		    } else if (direction == 'up') {
-		        snakeY--;
-		    } else if (direction == 'down') {
-		        snakeY++;
-		    }
+	    		var snakeX = snake[0].x;
+	    		var snakeY = snake[0].y;
 
-		    /*
-			    If the snake touches the canvas path or itself, it will die!
-			    Therefore if x or y of an element of the snake, don't fit inside the canvas, the game will be stopped.
-			    If the check_collision is true, it means the the snake has crashed on its body itself, then the game will be stopped again. 
-		    */
-		    if (snakeX == -1 || snakeX == w / snakeSize || snakeY == -1 || snakeY == h / snakeSize || checkCollision(snakeX, snakeY, snake)) {
-		        //Stop the game.
+	    		/*
+				    Make the snake move.
+				    Use a variable ('direction') to control the movement.
+				    To move the snake, pop out the last element of the array and shift it on the top as first element.
+			    */
+			    if (direction == 'right') {
+			        snakeX++;
+			    } else if (direction == 'left') {
+			        snakeX--;
+			    } else if (direction == 'up') {
+			        snakeY--;
+			    } else if (direction == 'down') {
+			        snakeY++;
+			    }
 
-		        //Make the start button enabled again.
-		        btn.removeAttribute('disabled', true);
+			    /*
+				    If the snake touches the canvas path or itself, it will die!
+				    Therefore if x or y of an element of the snake, don't fit inside the canvas, the game will be stopped.
+				    If the check_collision is true, it means the the snake has crashed on its body itself, then the game will be stopped again. 
+			    */
+			    if (snakeX == -1 || snakeX == w / snakeSize || snakeY == -1 || snakeY == h / snakeSize || checkCollision(snakeX, snakeY, snake)) {
+			        //Stop the game.
 
-		        //Clean up the canvas.
-		        ctx.clearRect(0, 0, w, h);
-		        gameloop = clearInterval(gameloop);
-		        return;
-		    }
+			        //Make the start button enabled again.
+			        btn.removeAttribute('disabled', true);
 
-		    // If the snake eats food it becomes longer and this means that, in this case, you shouldn't pop out the last element of the array.
-		    if (snakeX == food.x && snakeY == food.y) {
-		        // Create a new square instead of moving the tail.
-		        var tail = {
-		            x: snakeX,
-		            y: snakeY
-		        };
-		        score++;
+			        //Clean up the canvas.
+			        ctx.clearRect(0, 0, w, h);
+			        gameloop = clearInterval(gameloop);
+			        return;
+			    }
 
-		        //Create new food.
-		        createFood();
-		    } else {
+			    // If the snake eats food it becomes longer and this means that, in this case, you shouldn't pop out the last element of the array.
+			    if (snakeX == food.x && snakeY == food.y) {
+			        // Create a new square instead of moving the tail.
+			        var tail = {
+			            x: snakeX,
+			            y: snakeY
+			        };
+			        score++;
 
-		        //Pop out the last cell.
-		        var tail = snake.pop();
-		        tail.x = snakeX;
-		        tail.y = snakeY;
-		    }
+			        //Create new food.
+			        createFood();
+			    } else {
 
-		    //Puts the tail as the first cell.
-		    snake.unshift(tail);
+			        //Pop out the last cell.
+			        var tail = snake.pop();
+			        tail.x = snakeX;
+			        tail.y = snakeY;
+			    }
 
-		    //For each element of the array create a square using the bodySnake function we created before.
-		    for (var i = 0; i < snake.length; i++) {
-		        bodySnake(snake[i].x, snake[i].y);
-		    }
+			    //Puts the tail as the first cell.
+			    snake.unshift(tail);
 
-		    //Create food using the _pizza_ function.
-		    pizza(food.x, food.y);
+			    //For each element of the array create a square using the bodySnake function we created before.
+			    for (var i = 0; i < snake.length; i++) {
+			        bodySnake(snake[i].x, snake[i].y);
+			    }
 
-		    //Put the score text.
-		    scoreText();
+			    //Create food using the _pizza_ function.
+			    pizza(food.x, food.y);
+
+			    //Put the score text.
+			    scoreText();
+	    	}
+
+	    	
 	    }
 
 	    var init = function() {
+	    	score = 0;
 	    	direction = "down";
 	    	drawSnake();
 	    	createFood();
@@ -255,5 +262,11 @@ Template.game.events({
         //Clean up the canvas.
         ctx.clearRect(0, 0, w, h);
         gameloop = clearInterval(gameloop);
+	},
+	'click #btn-pause'(event, instance) {
+		running = !running;
+		let btn = document.getElementById('btn-pause');
+		if (running) btn.textContent = 'Pause';
+		if (!running) btn.textContent = 'Resume';
 	}
 });
