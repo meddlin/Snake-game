@@ -74,7 +74,10 @@ const checkCollision = (x, y, array) => {
     return false;
 };
 
-export const paint = (context, running, snake, food, score, direction, width, height, snakeSize, gameloop) => {
+export const paint = (context, running, snake, food, score, width, height, snakeSize, gameloop) => {
+
+    let direction = localStorage.getItem("direction");
+
     if (running) {
         //Let's draw the space in which the snake will move.
         context.fillStyle = "lightgray";
@@ -135,15 +138,17 @@ export const paint = (context, running, snake, food, score, direction, width, he
             //Create new food.
             food = createFood(snake);
         } else {
-
             //Pop out the last cell.
+            // console.log('above snake.pop()')
+            // console.log(`snake: ${JSON.stringify(snake)}`)
+            // console.log(`snake: ${typeof(snake)}`)
             tail = snake.pop();
             tail.x = snakeX;
             tail.y = snakeY;
         }
 
         //Puts the tail as the first cell.
-        snake.unshift(tail);
+        snake.unshift(tail)
 
         //For each element of the array create a square using the bodySnake function we created before.
         for (var i = 0; i < snake.length; i++) {
