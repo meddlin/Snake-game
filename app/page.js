@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import { paint, drawSnake, createFood } from './utility/game';
+import determineKeyPress from './utility/controls';
 
 export default function Home() {
 
@@ -9,58 +10,30 @@ export default function Home() {
   let w = 700;
   let h = 600;
   let score = 0;
-  let snake;
-  let food;
-  let drawModule;
-  let direction = 'right';
-  let running = true;
-
-  const determineKeyPress = (ev) => {
-    console.log(`pressed: ${ev.code}`);
-    // console.log(`pressed - type: ${typeof(ev.code)}`)
-
-    switch (ev.code) {
-      case 'ArrowLeft':
-        if (direction != 'right') {
-          direction = 'left';
-        }
-        break;
-
-      case 'ArrowRight':
-        if (direction != 'left') {
-          direction = 'right';
-        }
-        break;
-
-      case 'ArrowUp':
-        if (direction != 'down') {
-          direction = 'up';
-        }
-        break;
-
-      case 'ArrowDown':
-        if (direction != 'up') {
-          direction = 'down';
-        }
-        break;
-    }
-  }
-
+  
   const canvasRef = useRef(null);
+
   useEffect(() => {
     document.addEventListener("keydown", (e) => {determineKeyPress(e)});
   }, []);
 
   function init(context) {
     let snake = drawSnake();
-    let food = createFood(snake);
-    let gameloop = setInterval(() => { paint(context, true, snake, food, score, direction, w, h, snakeSize, gameloop) }, 70);
-  }
+    localStorage.setItem("snake", JSON.stringify(snake));
 
+    let food = createFood(snake);
+    localStorage.setItem("food", JSON.stringify(food));
+
+    localStorage.setItem("direction", 'down');
+
+    let gameloop = setInterval(() => { 
+        paint(context, snake, score, w, h, snakeSize, gameloop);
+    }, 70);
+  }
 
   return (
     <main>
-      <h1>TEST</h1>
+      <h1>SNAKE GAME</h1>
 
       <canvas
         className="border-solid border-2 border-gray-400"
@@ -77,7 +50,6 @@ export default function Home() {
 
       <button id="start">Start</button>
       <button id="end">End</button>
-      <button id="pause">Pause</button>
     </main>
   );
 }
