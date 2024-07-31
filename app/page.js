@@ -10,10 +10,9 @@ export default function Home() {
   let w = 700;
   let h = 600;
   let score = 0;
-  let running = true;
-
   
   const canvasRef = useRef(null);
+  
   useEffect(() => {
     document.addEventListener("keydown", (e) => {determineKeyPress(e)});
   }, []);
@@ -27,9 +26,10 @@ export default function Home() {
 
     localStorage.setItem("direction", 'down');
 
-    let gameloop = setInterval(() => { paint(context, true, snake, food, score, w, h, snakeSize, gameloop) }, 70);
+    let gameloop = setInterval(() => { 
+        paint(context, snake, score, w, h, snakeSize, gameloop);
+    }, 70);
   }
-
 
   return (
     <main>
@@ -50,7 +50,6 @@ export default function Home() {
 
       <button id="start">Start</button>
       <button id="end">End</button>
-      <button id="pause">Pause</button>
     </main>
   );
 }
