@@ -1,8 +1,5 @@
 const determineKeyPress = (ev) => {
-    console.log(`pressed: ${ev.code}`);
-    // console.log(`pressed - type: ${typeof(ev.code)}`)
     let direction = localStorage.getItem("direction");
-    console.log(`LS - direction: ${direction}`)
 
     switch (ev.code) {
       case 'ArrowLeft':
