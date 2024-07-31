@@ -20,13 +20,10 @@ export default function Home() {
 
   function init(context) {
     let snake = drawSnake();
-    // localStorage.setItem("snake", JSON.stringify(snake));
-
-    // console.log(`init - snake: ${ JSON.stringify(snake) }`)
-    // console.log(`init - stored snake: ${ JSON.stringify(JSON.parse(localStorage.getItem("snake"))) }`)
+    localStorage.setItem("snake", JSON.stringify(snake));
 
     let food = createFood(snake);
-    // localStorage.setItem("food", JSON.stringify(food));
+    localStorage.setItem("food", JSON.stringify(food));
 
     localStorage.setItem("direction", 'down');
 

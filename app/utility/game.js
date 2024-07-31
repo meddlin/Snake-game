@@ -66,11 +66,9 @@ export const createFood = (snake) => {
 const checkCollision = (x, y, array) => {
     for (let i = 0; i < array.length; i++) {
         if (array[i].x === x && array[i].y === y)
-            // console.log(`Collision is: true`)
             return true;
     }
 
-    // console.log(`Collision is: false`)
     return false;
 };
 
@@ -127,6 +125,7 @@ export const paint = (context, running, snake, food, score, width, height, snake
 
         // If the snake eats food it becomes longer and this means that, in this case, you shouldn't pop out the last element of the array.
         let tail = {};
+        let food = JSON.parse(localStorage.getItem("food"));
         if (snakeX == food.x && snakeY == food.y) {
             // Create a new square instead of moving the tail.
             tail = {
@@ -136,12 +135,10 @@ export const paint = (context, running, snake, food, score, width, height, snake
             score = score + 1;
 
             //Create new food.
-            food = createFood(snake);
+            // food = createFood(snake);
+            localStorage.setItem("food", JSON.stringify(createFood(snake)));
         } else {
             //Pop out the last cell.
-            // console.log('above snake.pop()')
-            // console.log(`snake: ${JSON.stringify(snake)}`)
-            // console.log(`snake: ${typeof(snake)}`)
             tail = snake.pop();
             tail.x = snakeX;
             tail.y = snakeY;
@@ -156,6 +153,7 @@ export const paint = (context, running, snake, food, score, width, height, snake
         }
 
         //Create food using the _pizza_ function.
+        food = JSON.parse(localStorage.getItem("food"));
         pizza(context, food.x, food.y, snakeSize);
 
         //Put the score text.
