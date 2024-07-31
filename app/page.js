@@ -12,7 +12,7 @@ export default function Home() {
   let score = 0;
   
   const canvasRef = useRef(null);
-  
+
   useEffect(() => {
     document.addEventListener("keydown", (e) => {determineKeyPress(e)});
   }, []);
@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <main>
-      <h1>TEST</h1>
+      <h1>SNAKE GAME</h1>
 
       <canvas
         className="border-solid border-2 border-gray-400"
